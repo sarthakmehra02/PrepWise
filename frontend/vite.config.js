@@ -12,10 +12,21 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        manualChunks: {
-          'monaco': ['@monaco-editor/react'],
-          'pdf-lib': ['pdfjs-dist'],
-          'vendor': ['react', 'react-dom', 'react-router-dom', 'firebase/app', 'firebase/auth', 'firebase/firestore'],
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (id.includes('@monaco-editor') || id.includes('monaco-editor')) {
+              return 'monaco';
+            }
+            if (id.includes('pdfjs-dist')) {
+              return 'pdf-lib';
+            }
+            if (
+              id.includes('react') ||
+              id.includes('firebase')
+            ) {
+              return 'vendor';
+            }
+          }
         }
       }
     }
