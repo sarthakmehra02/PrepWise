@@ -1,102 +1,195 @@
-# 🚀 Prep Wise AI Platform
+<div align="center">
 
-![Prep Wise Banner](https://via.placeholder.com/1200x300/0f172a/38bdf8?text=Prep+Wise+AI+Platform)
+# ⚡ PREP WISE AI PLATFORM ⚡
+### *Next-Gen Voice AI Mock Interviews • Dynamic LaTeX Resume Engine • Precision ATS Scoring*
 
-**Prep Wise** is an advanced, AI-powered career preparation platform designed to help job seekers build professional resumes and ace their interviews. It combines real-time voice AI mock interviews, a dynamic LaTeX resume builder, and an aggressive AI-driven ATS resume analyzer into a single, cohesive, luxury dark-mode interface.
+[![Frontend Live](https://img.shields.io/badge/🚀_Live_App-prepwise--blush--ten.vercel.app-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://prepwise-blush-ten.vercel.app/)
+[![Backend API](https://img.shields.io/badge/⚡_API_Engine-interviewpreperator.onrender.com-46E3B7?style=for-the-badge&logo=render&logoColor=black)](https://interviewpreperator.onrender.com)
+[![System Status](https://img.shields.io/badge/Status-100%25_Operational-00e676?style=for-the-badge&logo=statuspage&logoColor=white)](https://prepwise-blush-ten.vercel.app/)
 
----
+<br/>
 
-## ✨ Key Features
+[![React](https://img.shields.io/badge/React_19-20232A?style=flat-square&logo=react&logoColor=61DAFB)](https://react.dev/)
+[![Vite](https://img.shields.io/badge/Vite_6-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vitejs.dev/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS_v4-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![Node.js](https://img.shields.io/badge/Node.js-43853D?style=flat-square&logo=node.js&logoColor=white)](https://nodejs.org/)
+[![Express](https://img.shields.io/badge/Express.js-000000?style=flat-square&logo=express&logoColor=white)](https://expressjs.com/)
+[![Firebase](https://img.shields.io/badge/Firebase_Firestore-FFCA28?style=flat-square&logo=firebase&logoColor=black)](https://firebase.google.com/)
+[![NVIDIA NIM](https://img.shields.io/badge/NVIDIA_NIM-76B900?style=flat-square&logo=nvidia&logoColor=white)](https://build.nvidia.com/)
+[![Vapi AI](https://img.shields.io/badge/Vapi_Voice_AI-5B21B6?style=flat-square&logo=airplayvideo&logoColor=white)](https://vapi.ai/)
+[![LaTeX](https://img.shields.io/badge/pdflatex-008080?style=flat-square&logo=latex&logoColor=white)](https://www.latex-project.org/)
 
-### 🎙️ Real-Time Voice AI Mock Interviews
-*   **Vapi-Powered Voice Agent**: Engage in highly realistic, conversational mock interviews with an AI agent.
-*   **Highly Tailored**: Customize the interview by job role, experience level, target company, and specific job descriptions.
-*   **Live Visualizer**: Real-time waveform visualizers and call duration tracking for an immersive experience.
+<p align="center">
+  <a href="https://prepwise-blush-ten.vercel.app/"><strong>🌐 Launch Web App »</strong></a>
+  &nbsp;•&nbsp;
+  <a href="https://interviewpreperator.onrender.com"><strong>🔌 Live API Endpoint »</strong></a>
+  &nbsp;•&nbsp;
+  <a href="#-system-architecture"><strong>System Architecture »</strong></a>
+  &nbsp;•&nbsp;
+  <a href="#-getting-started"><strong>Quickstart Guide »</strong></a>
+</p>
 
-### 📄 Visual LaTeX Resume Builder
-*   **Block-Based Editor**: Build your resume using intuitive visual blocks (Education, Experience, Projects, etc.) without needing to know LaTeX.
-*   **Real-Time Compilation**: The backend instantly compiles your blocks into a beautifully formatted, flush-left LaTeX document.
-*   **Cloud Sync**: Resumes are automatically synced and saved to Firebase Firestore.
-*   **ATS Pre-Check**: Instantly get your resume reviewed by the AI analyzer right from the editor.
-
-### 🕵️‍♂️ Aggressive ATS Resume Analyzer
-*   **NVIDIA NIM & AI SDK**: Powered by cutting-edge LLMs to analyze your resume text against strict industry standards.
-*   **Contextual Scoring**: Score your resume against a pasted Job Description or a manually configured target role.
-*   **Actionable Feedback**: Receive a 1-100 ATS Score, a breakdown of strengths, areas to improve, and a checklist of missing keywords.
-
-### 📊 Stored Data Dashboard
-*   **Centralized Hub**: View analytics on your total mock interviews and ATS analyses.
-*   **Review & Export**: Easily re-download generated LaTeX PDFs, review past ATS scores, and expand drop-down menus to view AI feedback without needing to re-run the analysis.
-
----
-
-## 🛠️ Technology Stack
-
-**Frontend**
-*   [React 19](https://react.dev/) & [Vite](https://vitejs.dev/)
-*   [Tailwind CSS v4](https://tailwindcss.com/) (Dark-Luxury-Tech UI design)
-*   [Firebase SDK](https://firebase.google.com/) (Authentication & Firestore)
-*   [Lucide React](https://lucide.dev/) (Iconography)
-*   [Monaco Editor](https://microsoft.github.io/monaco-editor/) (For raw LaTeX editing, if needed)
-
-**Backend**
-*   [Node.js](https://nodejs.org/) & [Express](https://expressjs.com/)
-*   [Firebase Admin SDK](https://firebase.google.com/docs/admin/setup)
-*   [Vapi Web SDK](https://vapi.ai/) (Voice AI Integration)
-*   [Vercel AI SDK](https://sdk.vercel.ai/docs) (LLM Integration via NVIDIA NIM)
-*   `pdflatex` (System level dependency for PDF generation)
+</div>
 
 ---
 
-## 🚀 Getting Started
+## 🌐 Live Deployments & Cloud Infrastructure
 
-### Prerequisites
+Experience Prep Wise in action across production environments:
 
-1.  **Node.js**: v18 or higher is recommended.
-2.  **LaTeX Distribution**: You **must** have `pdflatex` installed on your system path for the backend to compile resumes.
-    *   *Windows*: Install [MiKTeX](https://miktex.org/)
-    *   *macOS*: Install [MacTeX](https://tug.org/mactex/)
-    *   *Linux*: `sudo apt-get install texlive-latex-base texlive-fonts-recommended`
+| Service | Cloud Provider | Production URL | Health Check / Status |
+| :--- | :--- | :--- | :--- |
+| **Frontend Application** | [![Vercel](https://img.shields.io/badge/Vercel-Deployed-black?style=flat-square&logo=vercel)](https://prepwise-blush-ten.vercel.app/) | [**prepwise-blush-ten.vercel.app**](https://prepwise-blush-ten.vercel.app/) | [![Online](https://img.shields.io/badge/Status-ONLINE-00e676?style=flat-square)](https://prepwise-blush-ten.vercel.app/) |
+| **Backend API Server** | [![Render](https://img.shields.io/badge/Render-Hosted-46E3B7?style=flat-square&logo=render&logoColor=black)](https://interviewpreperator.onrender.com) | [**interviewpreperator.onrender.com**](https://interviewpreperator.onrender.com) | [![Healthy](https://img.shields.io/badge/Health-200_OK-00e676?style=flat-square)](https://interviewpreperator.onrender.com) |
 
-### Installation
+> 💡 **Quick API Ping:** Test the live API directly from your terminal:
+> ```bash
+> curl -X GET https://interviewpreperator.onrender.com/
+> # Response: {"status":"ok","service":"Prep Wise API"}
+> ```
 
-1.  **Clone the repository**
-2.  **Install Frontend Dependencies**
-    ```bash
-    cd frontend
-    npm install
-    ```
-3.  **Install Backend Dependencies**
-    ```bash
-    cd backend
-    npm install
-    ```
+---
 
-### Environment Variables
+## ⚡ What is Prep Wise?
 
-You will need to set up `.env` files in both the `frontend` and `backend` directories.
+**Prep Wise** is an end-to-end, ultra-responsive career acceleration suite tailored for technical and professional job seekers. Packed with an aggressive AI-driven ATS engine, real-time voice AI interview simulator, and dynamic LaTeX document compiler, Prep Wise transforms messy career profiles into interview-ready powerhouses.
 
-**Backend (`backend/.env`)**
+```
+       ┌────────────────────────────────────────────────────────┐
+       │               PREP WISE UNIFIED ECOSYSTEM              │
+       └──────────────────────────┬─────────────────────────────┘
+                                  │
+         ┌────────────────────────┼────────────────────────┐
+         ▼                        ▼                        ▼
+  🎙️ VOICE INTERVIEWS      📄 LATEX ENGINE          🕵️‍♂️ ATS ANALYZER
+  Real-Time Conversational   Block-Based Visual       Deep Semantic Match
+  Dual-Agent Pipeline        Instant Compilation      Keyword Gap Detection
+```
+
+---
+
+## ✨ Cutting-Edge Capabilities
+
+### 🎙️ 1. Real-Time Conversational Voice AI
+* **Dual-Assistant Orchestration**: Features a dynamic collector agent and a senior technical interviewer agent powered by **Vapi AI**.
+* **Role & Experience Calibration**: Adapts question difficulty on the fly based on targeted company, seniority, and candidate tech stack.
+* **Resume-Aware Question Synthesis**: Extracts projects and technical stacks directly from uploaded resumes to ask targeted, role-specific technical questions in alternating sequence.
+* **Live Audio Visualizer**: Responsive real-time waveform visualizers and telemetry tracking call duration and speaker cadence.
+
+### 📄 2. Dynamic Visual LaTeX Resume Builder
+* **Block-Based Visual Editor**: Modular drag-and-drop/card configuration for Education, Experience, Projects, Skills, and Certifications.
+* **Instant Native LaTeX Compilation**: Powered by backend `pdflatex` rendering sharp, industry-standard, typography-flush PDFs.
+* **Cloud Persistence**: Automatic state synchronisation with Firebase Firestore for cross-device resume management.
+* **Built-in ATS Pre-Flight**: Run your draft resume through the ATS analyzer with a single click before downloading.
+
+### 🕵️‍♂️ 3. Aggressive ATS Resume Analyzer
+* **NVIDIA NIM Accelerated LLMs**: Runs inference through high-throughput **Llama 3.2** vision-instruct models via NVIDIA NIM.
+* **Contextual Job-Description Matching**: Scores alignment against pasted job specifications with rigorous weighted criteria.
+* **Comprehensive Diagnostic Feedback**:
+  * 🎯 **1–100 Weighted Score**
+  * 🟢 **Key Strengths**
+  * 🔴 **Critical Missing Keywords**
+  * 🛠️ **Step-by-step Actionable Recommendations**
+
+### 📊 4. Unified Analytics Dashboard
+* **Real-time Overview**: Track performance over time across mock interview sessions and ATS scans.
+* **Historical Audit Vault**: Re-download previously generated LaTeX PDFs and inspect detailed AI feedback logs anytime.
+
+---
+
+## 📐 System Architecture
+
+```mermaid
+graph TD
+    User([👤 User / Candidate]) <-->|HTTPS / WebSockets| Frontend[💻 React 19 + Vite Frontend\nprepwise-blush-ten.vercel.app]
+    
+    subgraph Client Integrations
+        Frontend <-->|Audio WebRTC| VapiVoice[🎙️ Vapi Voice AI Agent]
+        Frontend <-->|Auth & Sync| FirebaseClient[🔥 Firebase Client SDK]
+    end
+    
+    Frontend <-->|REST API| Backend[⚙️ Express.js Backend Server\ninterviewpreperator.onrender.com]
+    
+    subgraph Cloud Services & Intelligence
+        Backend <-->|Admin CRUD| FirebaseAdmin[🔥 Firebase Admin Firestore]
+        Backend <-->|LLM Inference| NvidiaNIM[🧠 NVIDIA NIM API\nLlama 3.2 Vision Instruct]
+        Backend <-->|Resume Compilation| PDFLatex[📄 System PDFLaTeX Engine]
+    end
+```
+
+---
+
+## 🛠️ Tech Stack & Tooling
+
+<div align="center">
+
+| Layer | Technologies |
+| :--- | :--- |
+| **Frontend Core** | React 19, Vite 6, Tailwind CSS v4, Lucide React Icons |
+| **Code & Typography** | Monaco Editor, Modern Dark-Luxury Aesthetics |
+| **Backend Runtime** | Node.js (v18+), Express.js, CORS, Node-Fetch |
+| **AI & Voice Engines** | Vapi Web SDK, NVIDIA NIM (OpenAI-compatible API), Vercel AI SDK |
+| **Document Processing** | TeX Live / MiKTeX `pdflatex`, Multer file handling |
+| **Cloud & Auth** | Firebase Authentication, Google Cloud Firestore, Firebase Admin SDK |
+| **Hosting & CI/CD** | Vercel (Frontend SPA), Render (Backend Containerized API) |
+
+</div>
+
+---
+
+## 🚀 Local Development Setup
+
+### 📋 Prerequisites
+1. **Node.js**: v18.0.0 or higher
+2. **LaTeX Engine**: `pdflatex` must be installed and accessible via system `PATH`:
+   * **Windows**: [MiKTeX](https://miktex.org/) or [TeX Live](https://tug.org/texlive/)
+   * **macOS**: `brew install --cask mactex-no-gui`
+   * **Linux**: `sudo apt-get install texlive-latex-base texlive-fonts-recommended`
+
+### 1️⃣ Clone & Install
+
+```bash
+# Clone the repository
+git clone https://github.com/sarthakmehra02/PrepWise.git
+cd PrepWise
+
+# Install Frontend dependencies
+cd frontend
+npm install
+
+# Install Backend dependencies
+cd ../backend
+npm install
+```
+
+### 2️⃣ Configure Environment Variables
+
+Create `.env` files in both directories:
+
+#### **Backend (`backend/.env`)**
 ```env
 PORT=5000
 FRONTEND_URL=http://localhost:5173
 
 # Vapi Assistant IDs
-VAPI_COLLECTOR_ID="your_collector_id"
-VAPI_INTERVIEWER_ID="your_interviewer_id"
+VAPI_COLLECTOR_ID="your_vapi_collector_id"
+VAPI_INTERVIEWER_ID="your_vapi_interviewer_id"
 
-# NVIDIA NIM LLM Key
+# NVIDIA NIM LLM Integration
 NVIDIA_API_KEY="your_nvidia_api_key"
 
-# Firebase Admin SDK
+# Firebase Admin SDK Credentials
 FIREBASE_PROJECT_ID="your_project_id"
 FIREBASE_CLIENT_EMAIL="your_client_email"
-FIREBASE_PRIVATE_KEY="your_private_key"
+FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----"
 ```
 
-**Frontend (`frontend/.env`)**
+#### **Frontend (`frontend/.env`)**
 ```env
+# Point to local backend (or production: https://interviewpreperator.onrender.com)
 VITE_BACKEND_URL=http://localhost:5000
+
+# Firebase Client Configuration
 VITE_FIREBASE_API_KEY="your_api_key"
 VITE_FIREBASE_AUTH_DOMAIN="your_auth_domain"
 VITE_FIREBASE_PROJECT_ID="your_project_id"
@@ -105,26 +198,59 @@ VITE_FIREBASE_MESSAGING_SENDER_ID="your_sender_id"
 VITE_FIREBASE_APP_ID="your_app_id"
 ```
 
-### Running the Application
+### 3️⃣ Launch Local Dev Servers
 
-1.  **Start the Backend Server**
-    ```bash
-    cd backend
-    node index.js
-    ```
-2.  **Start the Frontend Dev Server**
-    ```bash
-    cd frontend
-    npm run dev
-    ```
-3.  **Open the App**: Navigate to `http://localhost:5173` in your browser.
+```bash
+# Terminal 1: Backend
+cd backend
+node index.js
+# ⚡ Server live at http://localhost:5000
+
+# Terminal 2: Frontend
+cd frontend
+npm run dev
+# 🚀 App accessible at http://localhost:5173
+```
 
 ---
 
-## 🤝 Contributing
+## 📡 Live API Endpoints
 
-Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](#) if you want to contribute.
+The backend is publicly accessible at `https://interviewpreperator.onrender.com`:
 
-## 📝 License
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| `GET` | `/` | Service health status check |
+| `POST` | `/api/vapi/generate` | Generates tailored voice interview questions based on resume & role |
+| `POST` | `/api/vapi/collector-webhook` | Ingests interview setup specifications from voice collector assistant |
+| `POST` | `/api/compile-resume` | Compiles structured JSON blocks into a compiled LaTeX PDF document |
+| `POST` | `/api/analyze-resume` | Executes NVIDIA NIM AI analysis against job descriptions for ATS ranking |
 
-This project is licensed under the MIT License.
+---
+
+## 🛡️ Security & Best Practices
+
+* **CORS Whitelisting**: Strict origin validation restricting backend access to configured production domains and localhost instances.
+* **Payload Sanitation**: Automatic escape handling and token chunking for LLM prompts to protect LaTeX compiling pipelines.
+* **Encrypted Secrets**: Production credentials managed securely via Render and Vercel environment variable injection.
+
+---
+
+## 🤝 Contributing & Community
+
+Contributions are what make the open-source community such an amazing place to learn, inspire, and create.
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+---
+
+<div align="center">
+
+Made with ⚡ by the **Prep Wise** Team • Powered by **React 19**, **NVIDIA NIM**, & **Vapi AI**
+
+[Back to top ↑](#-prep-wise-ai-platform-)
+
+</div>
