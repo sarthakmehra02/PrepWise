@@ -245,12 +245,7 @@ Contributions are what make the open-source community such an amazing place to l
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
----
+## 📝 License
 
-<div align="center">
+This project is licensed under the MIT License.
 
-Made with ⚡ by the **Prep Wise** Team • Powered by **React 19**, **NVIDIA NIM**, & **Vapi AI**
-
-[Back to top ↑](#-prep-wise-ai-platform-)
-
-</div>
