@@ -1,11 +1,11 @@
 require('dotenv').config();
 const express = require('express');
-const cors    = require('cors');
+const cors = require('cors');
 const { generateText } = require('ai');
 const { createOpenAI } = require('@ai-sdk/openai');
 const { db } = require('./firebase');
 
-const app  = express();
+const app = express();
 const port = process.env.PORT || 5000;
 
 // ----------------------------------------------------------------
@@ -15,6 +15,7 @@ const allowedOrigins = [
   process.env.FRONTEND_URL || 'http://localhost:5173',
   'http://localhost:5174',
   'http://localhost:5175',
+  
 ];
 app.use(cors({
   origin: (origin, cb) => {
@@ -31,9 +32,9 @@ app.use(express.json({ limit: '5mb' }));
 // ----------------------------------------------------------------
 const nvidia = createOpenAI({
   baseURL: 'https://integrate.api.nvidia.com/v1',
-  apiKey:  process.env.NVIDIA_API_KEY,
+  apiKey: process.env.NVIDIA_API_KEY,
 });
-const NVIDIA_MODEL = 'meta/llama-3.3-70b-instruct';
+const NVIDIA_MODEL = 'meta/llama-3.2-11b-vision-instruct';
 
 // ----------------------------------------------------------------
 // callNvidiaRaw — direct HTTP to NVIDIA, avoids SDK JSON-parse bug
@@ -67,6 +68,18 @@ async function callNvidiaRaw(prompt, maxTokens = 2048) {
         }),
       });
 
+      // Check for HTTP-level errors (401 Unauthorized, 410 Gone, 429 Rate-limited, etc.)
+      if (!response.ok) {
+        let errBody = '';
+        try { errBody = await response.text(); } catch (_) { }
+        let apiMsg = errBody.slice(0, 300);
+        try {
+          const errJson = JSON.parse(errBody);
+          apiMsg = errJson?.detail || errJson?.message || errJson?.title || errJson?.type || apiMsg;
+        } catch (_) { }
+        throw new Error(`NVIDIA API error ${response.status}: ${apiMsg || 'check your API key and model availability.'}`);
+      }
+
       // Get raw text — do NOT call response.json() (fails on unescaped backslashes)
       let rawText = await response.text();
 
@@ -81,7 +94,7 @@ async function callNvidiaRaw(prompt, maxTokens = 2048) {
       }
 
       const content = parsed?.choices?.[0]?.message?.content;
-      if (!content) throw new Error('NVIDIA API returned empty content.');
+      if (!content) throw new Error('NVIDIA API returned empty content (finish_reason may be content_filter or length).');
       return content;
 
     } catch (err) {
@@ -228,7 +241,7 @@ function parseQuestions(rawText) {
   try {
     const parsed = JSON.parse(rawText.trim());
     if (Array.isArray(parsed)) return parsed;
-  } catch (_) {}
+  } catch (_) { }
 
   // Attempt 2: strip markdown fences
   const stripped = rawText
@@ -249,7 +262,7 @@ function parseQuestions(rawText) {
 app.post('/api/vapi/generate', async (req, res) => {
   const { role, experience, techStack, resumeContent, userId } = req.body;
   const requestId = Math.random().toString(36).substring(7);
-  
+
   console.log(`[generate:${requestId}] --- START ---`);
   console.log(`[generate:${requestId}] Role: ${role} | Exp: ${experience} | Tech: ${techStack}`);
   console.log(`[generate:${requestId}] Resume: ${resumeContent ? 'Yes (' + resumeContent.length + ' chars)' : 'No'}`);
@@ -323,7 +336,7 @@ app.post('/api/vapi/collector-webhook', async (req, res) => {
   const requestId = Math.random().toString(36).substring(7);
   console.log(`[collector-webhook:${requestId}] --- START ---`);
   try {
-    const message  = req.body?.message;
+    const message = req.body?.message;
     const toolCall = message?.toolCallList?.find(
       t => t.function?.name === 'submit_interview_details'
     );
@@ -340,8 +353,8 @@ app.post('/api/vapi/collector-webhook', async (req, res) => {
 
     console.log(`[collector-webhook:${requestId}] Data: ${role}, ${experience}, ${techStack}`);
     console.log(`[collector-webhook:${requestId}] STEP 1: Calling AI for questions...`);
-    
-    const result    = await generateText({
+
+    const result = await generateText({
       model: nvidia.chat(NVIDIA_MODEL),
       prompt: buildGeminiPrompt(role, experience, techStack),
     });
@@ -384,16 +397,16 @@ app.post('/api/vapi/collector-webhook', async (req, res) => {
 app.post('/api/vapi/generate-from-content', async (req, res) => {
   const { content, role, experience, techStack, userId } = req.body;
   const requestId = Math.random().toString(36).substring(7);
-  
+
   console.log(`[generate-from-content:${requestId}] --- START ---`);
-  
+
   if (!content || content.trim().length < 50) {
     console.warn(`[generate-from-content:${requestId}] Error: Document content too short`);
     return res.status(400).json({ error: 'Document content is too short or missing.' });
   }
 
   const truncated = content.slice(0, 5000);
-  const roleCtx   = role ? `\nRole: ${role}\nLevel: ${experience || 'General'}\nTech: ${techStack || 'General'}` : '';
+  const roleCtx = role ? `\nRole: ${role}\nLevel: ${experience || 'General'}\nTech: ${techStack || 'General'}` : '';
   const prompt = `You are a senior technical interviewer.${roleCtx}\n\nA candidate provided the following document:\n---\n${truncated}\n---\nGenerate EXACTLY 7 highly relevant, challenging interview questions based on this document${role ? ' and the role' : ''}.\nFocus on specific skills, projects, and technologies mentioned. Avoid generic questions.\nReturn ONLY a valid JSON array of 7 strings. No markdown, no preamble.`;
 
   const displayRole = role || 'Document-based Interview';
@@ -402,20 +415,20 @@ app.post('/api/vapi/generate-from-content', async (req, res) => {
   try {
     console.log(`[generate-from-content:${requestId}] STEP 1: Calling NVIDIA AI (${NVIDIA_MODEL})...`);
     const startTime = Date.now();
-    const result    = await generateText({ model: nvidia.chat(NVIDIA_MODEL), prompt });
+    const result = await generateText({ model: nvidia.chat(NVIDIA_MODEL), prompt });
     console.log(`[generate-from-content:${requestId}] STEP 2: AI response received in ${Date.now() - startTime}ms`);
-    
+
     console.log(`[generate-from-content:${requestId}] STEP 3: Parsing questions...`);
     const questions = parseQuestions(result.text);
     console.log(`[generate-from-content:${requestId}] STEP 4: Successfully parsed ${questions.length} questions`);
-    
+
     const formatted = questions.map((q, i) => `${i + 1}. ${q}`).join('\n');
-    
+
     if (db && userId) {
       console.log(`[generate-from-content:${requestId}] STEP 5: Saving to Firestore...`);
       await db.collection('interviews').add({ userId, source: 'document', role: displayRole, questions, createdAt: new Date().toISOString() });
     }
-    
+
     console.log(`[generate-from-content:${requestId}] --- SUCCESS --- Returning response`);
     return res.status(200).json({ success: true, questions, variableValues: { role: displayRole, experience: experience || 'General', questions: formatted } });
   } catch (err) {
@@ -435,7 +448,7 @@ app.post('/api/resume/analyze', async (req, res) => {
   }
 
   const truncated = resumeText.slice(0, 8000);
-  
+
   // Build context section based on what was provided
   let contextSection = '';
   if (jobDescription) {
@@ -505,20 +518,20 @@ app.post('/api/resume/parse', async (req, res) => {
 
   // ── URL regex extraction (runs before AI, used to fill in AI gaps) ──
   const extractUrls = (text) => {
-    const linkedin  = text.match(/(?:linkedin\.com\/in\/[\w\-]+)/i);
-    const github    = text.match(/(?:github\.com\/[\w\-]+(?:\/[\w\-]+)?)/i);
-    const email     = text.match(/[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/i);
-    const phone     = text.match(/(?:\+?1[\s.-]?)?(?:\(?[2-9]\d{2}\)?[\s.-]?)?[2-9]\d{2}[\s.-]?\d{4}/i);
+    const linkedin = text.match(/(?:linkedin\.com\/in\/[\w\-]+)/i);
+    const github = text.match(/(?:github\.com\/[\w\-]+(?:\/[\w\-]+)?)/i);
+    const email = text.match(/[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/i);
+    const phone = text.match(/(?:\+?1[\s.-]?)?(?:\(?[2-9]\d{2}\)?[\s.-]?)?[2-9]\d{2}[\s.-]?\d{4}/i);
     // Portfolio: any URL that's not linkedin/github/email
     const urlPattern = /https?:\/\/(?!(?:www\.)?(?:linkedin|github))[\w\-]+(\.[\w\-]+)+(?:\/[^\s]*)*/gi;
     const allUrls = [...(text.match(urlPattern) || [])];
     const portfolio = allUrls.find(u => !u.includes('linkedin') && !u.includes('github') && !u.includes('mailto'));
     return {
-      linkedin:  linkedin  ? linkedin[0]  : null,
-      github:    github    ? github[0]    : null,
-      email:     email     ? email[0]     : null,
-      phone:     phone     ? phone[0]     : null,
-      portfolio: portfolio ? portfolio    : null,
+      linkedin: linkedin ? linkedin[0] : null,
+      github: github ? github[0] : null,
+      email: email ? email[0] : null,
+      phone: phone ? phone[0] : null,
+      portfolio: portfolio ? portfolio : null,
     };
   };
 
@@ -565,16 +578,16 @@ Return ONLY valid JSON. No markdown formatting. No preamble.`;
     const result = await generateText({ model: nvidia.chat(NVIDIA_MODEL), prompt });
     let raw = result.text.trim();
     const firstBrace = raw.indexOf('{');
-    const lastBrace  = raw.lastIndexOf('}');
+    const lastBrace = raw.lastIndexOf('}');
     if (firstBrace !== -1 && lastBrace !== -1) raw = raw.substring(firstBrace, lastBrace + 1);
     const blocks = JSON.parse(raw);
 
     // ── Post-process: fill in missing contact links with regex results ──
     if (!blocks.contact) blocks.contact = {};
-    if (!blocks.contact.linkedin  && regexUrls.linkedin)  blocks.contact.linkedin  = regexUrls.linkedin;
-    if (!blocks.contact.github    && regexUrls.github)    blocks.contact.github    = regexUrls.github;
-    if (!blocks.contact.email     && regexUrls.email)     blocks.contact.email     = regexUrls.email;
-    if (!blocks.contact.phone     && regexUrls.phone)     blocks.contact.phone     = regexUrls.phone;
+    if (!blocks.contact.linkedin && regexUrls.linkedin) blocks.contact.linkedin = regexUrls.linkedin;
+    if (!blocks.contact.github && regexUrls.github) blocks.contact.github = regexUrls.github;
+    if (!blocks.contact.email && regexUrls.email) blocks.contact.email = regexUrls.email;
+    if (!blocks.contact.phone && regexUrls.phone) blocks.contact.phone = regexUrls.phone;
     if (!blocks.contact.portfolio && regexUrls.portfolio) blocks.contact.portfolio = regexUrls.portfolio;
 
     console.log('[resume-parse] Final contact:', blocks.contact);
@@ -618,9 +631,9 @@ const buildLatexFromBlocks = (blocks) => {
 
   // Build contact header line
   const contactParts = [];
-  if (contact.email)     contactParts.push(escLaTeX(contact.email));
-  if (contact.phone)     contactParts.push(escLaTeX(contact.phone));
-  if (contact.linkedin)  {
+  if (contact.email) contactParts.push(escLaTeX(contact.email));
+  if (contact.phone) contactParts.push(escLaTeX(contact.phone));
+  if (contact.linkedin) {
     const raw = contact.linkedin.replace(/^https?:\/\//i, '');
     const url = contact.linkedin.startsWith('http') ? contact.linkedin : `https://${contact.linkedin}`;
     contactParts.push(`\\href{${url}}{${escLaTeX(raw)}}`);
@@ -805,12 +818,12 @@ app.post('/api/resume/chat', async (req, res) => {
     return res.status(400).json({ error: 'No user message found.' });
   }
 
-  const contact    = blocks?.contact        || {};
-  const experience = blocks?.experience     || [];
-  const projects   = blocks?.projects       || [];
-  const education  = blocks?.education      || [];
-  const skills     = blocks?.skills         || '';
-  const custom     = blocks?.customSections || [];
+  const contact = blocks?.contact || {};
+  const experience = blocks?.experience || [];
+  const projects = blocks?.projects || [];
+  const education = blocks?.education || [];
+  const skills = blocks?.skills || '';
+  const custom = blocks?.customSections || [];
 
   const hasBlocks = contact.name || experience.length || education.length || projects.length;
 
@@ -872,7 +885,7 @@ Patch rules:
 
     // Extract JSON object
     const firstBrace = raw.indexOf('{');
-    const lastBrace  = raw.lastIndexOf('}');
+    const lastBrace = raw.lastIndexOf('}');
     if (firstBrace !== -1 && lastBrace !== -1) {
       raw = raw.substring(firstBrace, lastBrace + 1);
     }
@@ -896,11 +909,11 @@ Patch rules:
     let updatedBlocks = null;
     if (patch && blocks) {
       updatedBlocks = {
-        contact:        patch.contact        || blocks.contact        || {},
-        education:      patch.education      || blocks.education      || [],
-        experience:     patch.experience     || blocks.experience     || [],
-        projects:       patch.projects       || blocks.projects       || [],
-        skills:         patch.skills         !== undefined ? patch.skills : (blocks.skills || ''),
+        contact: patch.contact || blocks.contact || {},
+        education: patch.education || blocks.education || [],
+        experience: patch.experience || blocks.experience || [],
+        projects: patch.projects || blocks.projects || [],
+        skills: patch.skills !== undefined ? patch.skills : (blocks.skills || ''),
         customSections: patch.customSections || blocks.customSections || [],
       };
     }
@@ -980,7 +993,7 @@ Return ONLY this valid JSON, no markdown, no preamble:
 
     // Recalculate average server-side for safety
     const scoreValues = Object.values(feedback.scores);
-    feedback.average  = parseFloat((scoreValues.reduce((a, b) => a + b, 0) / scoreValues.length).toFixed(1));
+    feedback.average = parseFloat((scoreValues.reduce((a, b) => a + b, 0) / scoreValues.length).toFixed(1));
 
     if (db && userId) {
       await db.collection('feedback').add({
@@ -1004,20 +1017,20 @@ Return ONLY this valid JSON, no markdown, no preamble:
 
 // Start server
 // ----------------------------------------------------------------
-const server = // ── FAIL-SAFE: Generate questions from raw collector transcript ──
+// ── FAIL-SAFE: Generate questions from raw collector transcript ──
 app.post('/api/vapi/generate-from-transcript', async (req, res) => {
   const { transcript, userId } = req.body;
   const requestId = Math.random().toString(36).substring(7);
 
   console.log(`[transcript-handoff:${requestId}] --- START ---`);
-  
+
   if (!transcript || transcript.length < 50) {
     console.warn(`[transcript-handoff:${requestId}] Error: Transcript too short`);
     return res.status(400).json({ error: 'Transcript too short to process.' });
   }
 
   console.log(`[transcript-handoff:${requestId}] STEP 1: Extracting role/skills from transcript...`);
-  
+
   const extractPrompt = `The following is a conversation between an AI Collector and a Candidate.
 Extract the "Target Role" and "Primary Technologies/Skills" the candidate mentioned.
 Transcript:
@@ -1036,7 +1049,7 @@ Return ONLY a JSON object with keys "role" and "techStack". No markdown.`;
     } catch (e) { console.warn(`[transcript-handoff:${requestId}] Extraction parse failed, using defaults`); }
 
     console.log(`[transcript-handoff:${requestId}] STEP 2: Custom Agent Data Extracted -> Role: ${role}, Tech: ${techStack}`);
-    
+
     const genPrompt = `You are a senior technical interviewer.
 Target Role: ${role}
 Tech Stack: ${techStack}
@@ -1046,7 +1059,7 @@ Return ONLY a valid JSON array of 7 strings. No markdown.`;
     console.log(`[transcript-handoff:${requestId}] STEP 3: Requesting questions from AI...`);
     const genResult = await generateText({ model: nvidia.chat(NVIDIA_MODEL), prompt: genPrompt });
     const questions = parseQuestions(genResult.text);
-    
+
     console.log(`[transcript-handoff:${requestId}] STEP 4: Successfully received ${questions.length} questions from AI`);
 
     const formatted = questions.map((q, i) => `${i + 1}. ${q}`).join('\n');
@@ -1064,7 +1077,7 @@ Return ONLY a valid JSON array of 7 strings. No markdown.`;
 
 // Start server
 // ----------------------------------------------------------------
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`\n🚀  Prep Wise API running on port ${port}`);
   console.log(`    NVIDIA key    : ${process.env.NVIDIA_API_KEY ? '✓ loaded' : '⚠ NVIDIA_API_KEY not set'}\n`);
 });
